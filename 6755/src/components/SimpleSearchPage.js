@@ -4,8 +4,7 @@ import SimpleSearchComponent from './SimpleSearchComponent';
 const SimpleSearchPage = (props) => {
     console.log(props);
     return ( 
-        <div>
-            SimpleSearchPage.
+        <div className="container">
             <SimpleSearchComponent />
         </div>
     );

@@ -1,9 +1,8 @@
 import React from 'react';
 
 const WizardryPage = () => (
-    <div>
+    <div className="container">
         <button className="wizardry-button">Delete</button>
-        CssWizardryPage.
     </div>
 );
 

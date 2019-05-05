@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import moment from 'moment';
 
 class SimpleSearchComponent extends Component {
     state = {
         APIEndpoint: 'https://hn.algolia.com/api/v1/search?query=',
-        query: undefined,
+        query: '',
         loading: false,
+        isFocused: false,
         results: [],
         searchHistory: {}
     }
@@ -23,11 +24,18 @@ class SimpleSearchComponent extends Component {
         }
     }
 
-    handleSearchChange = (e) => {
-        console.log("Search changed = " + e.target.value);
-        this.setState({ query: e.target.value });
+    handleInputFocus = () => {
+        this.setState({ isFocused: true })
+    }
 
-        if (e.target.value === "") {
+    handleInputBlur = (e) => {
+        this.setState({ isFocused: false })
+    }
+
+    handleSearchChange = (e) => {
+        this.setState({ query: e.target.value });
+        
+        if (!e.target.value || e.target.value === "") {
             this.setState({ results: [] })
         } else {
             this.requestData();
@@ -37,15 +45,19 @@ class SimpleSearchComponent extends Component {
 
     handleSearchCompleted = (e) => {
         e.preventDefault();
-        const searchHistory = this.state.searchHistory;
-        const timestamp = moment().format("YYYY-MM-DD hh:mm:ss A");
-        searchHistory[timestamp] = this.state.query;
-        this.setState({ searchHistory });
-        this.persistSearchHistoryLocally();
+        console.log(this.state.query)
+        if (this.state.query && this.state.query !== "") {
+            const searchHistory = this.state.searchHistory;
+            const timestamp = moment().format("YYYY-MM-DD hh:mm:ss A");
+            searchHistory[timestamp] = this.state.query;
+            this.setState({ searchHistory });
+            this.persistSearchHistoryLocally();
+        }
     }
 
     requestData() {
-        const requestUrl = this.state.APIEndpoint + this.state.query + "&tags=story";
+        const queryString = this.state.query.replace(/[&<>"'/=^%]/ig, ''); // Replace common URL encoded characters to avoid sending a bad request
+        const requestUrl = this.state.APIEndpoint + queryString + "&tags=story&hitsPerPage=10";
 
         this.setState({ loading: true });
         fetch(requestUrl)
@@ -53,11 +65,16 @@ class SimpleSearchComponent extends Component {
             if (response.ok) {
               return response.json();
             } else {
-              throw new Error('Error!');
+              throw new Error('Error retrieving results...');
             }
           })
           .then(data => this.setState({ results: data.hits, loading: false }))
           .catch(error => this.setState({ error, loading: false }));
+    }
+
+    handleClearSearchQuery = () => {
+        this.setState({ query: '' });
+        this.setState({ results: '' });
     }
 
     handleClearSearchHistoryAll = () => {
@@ -72,59 +89,92 @@ class SimpleSearchComponent extends Component {
         this.persistSearchHistoryLocally();
     }
 
+    handleResultClicked = (query) => {
+        console.log('clicked')
+        this.setState({ query });
+    }
+
     persistSearchHistoryLocally() {
         const json = JSON.stringify(this.state.searchHistory);
         localStorage.setItem("searchHistory", json);
     }
 
     render() { 
-        const { results, query, searchHistory } = this.state;
+        const { isFocused, results, query, searchHistory } = this.state;
         let queryResultBolded;
 
         return (
-            <div>
+            <div className="">
                 <form className="search" onSubmit={this.handleSearchCompleted}>
-                    <input className="search__input" type="text" name="option" onChange={this.handleSearchChange}/>
-                    <button className="button">Search</button>
+                    <input 
+                        placeholder='Search HN articles... e.g. "Java"' 
+                        className="search__input" 
+                        type="text" 
+                        name="option" 
+                        value={query || ''}
+                        autoComplete="off"
+                        onChange={this.handleSearchChange}
+                        onFocus={this.handleInputFocus}
+                        onBlur={this.handleInputBlur}
+                    />
+                    <button 
+                        className="clear-search-query-button" 
+                        onClick={this.handleClearSearchQuery}>
+                        X
+                    </button>
                 </form>
-
-                <div className="search-results">
-                    {results.length > 0 && (
-                        <ul>
-                        {results.map((result, index) => {
-                            let queryResult = result.title
-                            let searchKeyNdx = queryResult.toLowerCase().indexOf(query.toLowerCase());
-                            if (searchKeyNdx > -1) {
-                                queryResultBolded = [
-                                    queryResult.substring(0, searchKeyNdx),
-                                    <strong key={result.title + "-" + index}>
-                                        {queryResult.substring(searchKeyNdx, searchKeyNdx + query.length)}
-                                    </strong>,
-                                    queryResult.substring(searchKeyNdx + query.length)
-                                ];
-                                return <li key={queryResult}>{queryResultBolded}</li>;
-                            } 
-                        })}
-                        </ul>
-                    )}
-                </div>
+                
+                {isFocused && results.length > 0 && query && (
+                    <div className="search-results">
+                            {results.map((result, index) => {
+                                let queryResult = result.title
+                                let searchKeyNdx = queryResult.toLowerCase().indexOf(query.toLowerCase());
+                                if (searchKeyNdx > -1) {
+                                    queryResultBolded = [
+                                        queryResult.substring(0, searchKeyNdx),
+                                        <strong key={result.title + "-" + index}>
+                                            {queryResult.substring(searchKeyNdx, searchKeyNdx + query.length)}
+                                        </strong>,
+                                        queryResult.substring(searchKeyNdx + query.length)
+                                    ];
+                                    return <span 
+                                                className="query-result" 
+                                                key={queryResult}
+                                                onMouseDown={() => this.handleResultClicked(queryResult)}
+                                            >
+                                                {queryResultBolded}
+                                            </span>;
+                                } 
+                            })}
+                    </div>
+                )}
                 
                 <div className="search-history">
-                    <h2>Search history</h2>
-                    <button className="clear-history" onClick={this.handleClearSearchHistoryAll}>Clear search history</button>
+                    <div className="search-history-header">
+                        <h2 className="search-history-title">Search history</h2>
+                        <button className="clear-history-all-button" onClick={this.handleClearSearchHistoryAll}>Clear search history</button>
+                    </div>
+                    <hr></hr>
                     {Object.keys(searchHistory).map((searchHistoryResult, index) => (
-                        <div key={index}>
-                            <strong key={"search-term-" + index}>
-                                {searchHistory[searchHistoryResult]} - 
-                                {moment(searchHistoryResult).format("YYYY-MM-DD hh:mm A")}
-                            </strong>      
-                            <button 
-                                key={"clear-history-" + index} 
-                                className="clear-history" 
-                                onClick={ () => this.handleClearSearchHistoryItem(searchHistoryResult) }>
-                                Clear Item
-                            </button>
-                        </div>
+                        <Fragment key={index}>
+                            <div className="search-history-item" key={"search-history-item-" + index}>
+                                <strong 
+                                    className="search-history-term"
+                                    key={"search-term-" + index}>
+                                    {searchHistory[searchHistoryResult]}
+                                </strong>      
+                                <span className="search-history-timestamp">
+                                    {moment(searchHistoryResult).format("YYYY-MM-DD hh:mm A")}
+                                    <button 
+                                        key={"clear-history-" + index} 
+                                        className="clear-history-item-button" 
+                                        onClick={ () => this.handleClearSearchHistoryItem(searchHistoryResult) }>
+                                        X
+                                    </button>
+                                </span>
+                            </div>
+                            <hr></hr>
+                        </Fragment>
                     ))}
                 </div>
 
