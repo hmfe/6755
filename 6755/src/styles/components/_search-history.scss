@@ -1,0 +1,52 @@
+.search-history {
+    margin: 0;
+    padding: $lg-size;
+}
+
+.search-history-header, .search-history-item {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.search-history-term {
+    max-width: 50rem;
+}
+
+.search-history-timestamp {
+    color: $secondary-dark;
+    font-size: $sm-size;
+}
+
+.clear-history-all-button {
+    background:none;
+    border:none; 
+    padding-top: 1rem;
+    text-decoration: underline;
+    cursor: pointer;
+    outline: none;
+    font-size: $sm-size;
+}
+
+.clear-history-item-button {
+    background:none;
+    border:none;
+    color: $secondary-dark;
+    padding-left: $m-size;
+    cursor: pointer;
+    outline: none;
+    font-size: $m-size;
+}
+
+
+// Stack search history when viewing on mobile
+@media (max-width: $desktop-breakpoint) {
+    .search-history-header, .search-history-item {
+        flex-direction: column;
+    }
+
+    .clear-history-all-button {
+        text-align: left;
+        margin-bottom: $sm-size;
+    }
+}
