@@ -104,7 +104,7 @@ class SimpleSearchComponent extends Component {
         let queryResultBolded;
 
         return (
-            <div className="">
+            <div className="container">
                 <form className="search" onSubmit={this.handleSearchCompleted}>
                     <input 
                         placeholder='Search HN articles... e.g. "Java"' 

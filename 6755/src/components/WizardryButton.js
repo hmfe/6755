@@ -1,9 +1,9 @@
 import React from 'react';
 
-const WizardryPage = () => (
+const WizardryButton = () => (
     <div className="container">
         <button className="wizardry-button">Delete</button>
     </div>
 );
 
-export default WizardryPage;
+export default WizardryButton;

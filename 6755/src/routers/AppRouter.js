@@ -1,8 +1,7 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import WizardryPage from '../components/WizardryPage';
-import SimpleSearchPage from '../components/SimpleSearchPage';
-import NotFoundPage from '../components/NotFoundPage';
+import WizardryButton from '../components/WizardryButton';
+import SimpleSearchComponent from '../components/SimpleSearchComponent';
 import Header from '../components/Header';
 
 
@@ -11,9 +10,8 @@ const AppRouter = () => (
     <BrowserRouter>
             <Header />
                 <Switch>
-                    <Route path='/' component={SimpleSearchPage} exact={true}/>
-                    <Route path='/css-wizardry' component={WizardryPage} exact={true}/>
-                    <Route component={NotFoundPage}/>
+                    <Route path='/' component={SimpleSearchComponent} exact={true}/>
+                    <Route path='/css-wizardry' component={WizardryButton} exact={true}/>
                 </Switch>
     </BrowserRouter>
 );
