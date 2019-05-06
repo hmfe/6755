@@ -26,7 +26,7 @@ class SimpleSearchComponent extends Component {
 
     render() {
         return (
-            <div className="container">
+            <main className="container">
                 <SearchInput 
                     isFocused={this.state.isFocused}
                     query={this.state.query}
@@ -48,7 +48,7 @@ class SimpleSearchComponent extends Component {
                     handleSetSearchHistory={this.handleSetSearchHistory}
                     persistSearchHistoryLocally={this.persistSearchHistoryLocally}
                 />
-            </div>
+            </main>
         )
     };
 };

@@ -49,7 +49,7 @@ class SimpleSearchComponent extends Component {
                 <input 
                     placeholder='Search HN articles... e.g. "Java"' 
                     className="search__input" 
-                    type="text" 
+                    type="search" 
                     name="option" 
                     value={this.props.query || ''}
                     autoComplete="off"

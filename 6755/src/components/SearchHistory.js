@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import moment from 'moment';
+import moment, { isMoment } from 'moment';
 
 class SearchHistory extends Component {
 
@@ -46,7 +46,9 @@ class SearchHistory extends Component {
                                     {searchHistory[searchHistoryResult]}
                                 </strong>      
                                 <span className="search-history-timestamp">
-                                    {moment(searchHistoryResult).format("YYYY-MM-DD hh:mm A")}
+                                    <time datetime={moment(searchHistoryResult).toISOString()}>
+                                        {moment(searchHistoryResult).format("YYYY-MM-DD hh:mm A")}
+                                    </time>
                                     <button 
                                         key={"clear-history-" + index} 
                                         className="clear-history-item-button" 
