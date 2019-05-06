@@ -8,12 +8,15 @@ This project uses [NPM](https://www.npmjs.com/) and [Yarn](https://yarnpkg.com/e
 Clone and navigate to repo directory
 ```
 $ git clone https://github.com/nordenskiold/6755.git
-$ cd 6755
+$ cd 6755/6755
 ```
 
 Install Dependencies
 ```
 $ npm install
+
+(If you do not have yarn installed globally or in your path...)
+$ npm install -g yarn
 ```
 
 Run dev-server
