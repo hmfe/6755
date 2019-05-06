@@ -46,8 +46,8 @@ class SearchHistory extends Component {
                                     {searchHistory[searchHistoryResult]}
                                 </strong>      
                                 <span className="search-history-timestamp">
-                                    <time dateTime={moment(searchHistoryResult).toISOString()}>
-                                        {moment(searchHistoryResult).format("YYYY-MM-DD hh:mm A")}
+                                    <time dateTime={moment(searchHistoryResult, "YYYY-MM-DD hh:mm:ss A").toISOString()}>
+                                        {moment(searchHistoryResult, "YYYY-MM-DD hh:mm:ss A").format("YYYY-MM-DD hh:mm A")}
                                     </time>
                                     <button 
                                         key={"clear-history-" + index} 
