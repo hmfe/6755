@@ -1,0 +1,9 @@
+.query-result {
+    display: block;
+    padding: $sm-size;
+}
+
+.query-result:hover {
+    background: $secondary-light;
+    cursor: pointer;
+}

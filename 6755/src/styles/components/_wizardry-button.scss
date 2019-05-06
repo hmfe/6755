@@ -1,0 +1,26 @@
+.wizardry-button {
+    background:
+        radial-gradient(10rem 10rem at 76% 50%, #fff 52%, transparent 53%),
+        linear-gradient(to right, $light-orange, $dark-orange);
+    border: none;
+    box-shadow:
+        0 0 0 0.2rem #808080,
+        0 0 0 0.3rem #b8b8b8;
+    color: #000;
+    font-weight: 800;
+    font-size: $xl-size;
+    height: 13.6rem;
+    width: 26.6rem;
+    display: flex;
+    align-items: center;
+    padding: 0rem 0rem 0rem 2.5rem;
+    font-family: Roboto, Arial, sans-serif;
+}
+
+.wizardry-button:after{
+    display: inline-block;
+    font-size: 9rem;
+    font-weight: 400;
+    content: "\00d7";
+    padding: 0rem 0rem 0.5rem 4.9rem;
+  }

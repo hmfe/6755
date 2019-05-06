@@ -1,0 +1,17 @@
+html {
+    font-size: 62.5%; // Normalize font size so that 1 rem == 10px;
+}
+
+body {
+    background: $secondary-light;
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-size: $m-size;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: default;
+}

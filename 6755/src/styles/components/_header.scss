@@ -1,0 +1,11 @@
+.header {
+    background: $primary;
+    color: #000;
+    padding: $m-size 0 $m-size 0;
+    display: block;
+}
+
+.header__title {
+    font-size: $xxl-size;
+    margin: 0;
+}
