@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import moment, { isMoment } from 'moment';
+import moment from 'moment';
 
 class SearchHistory extends Component {
 
